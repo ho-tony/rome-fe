@@ -37,19 +37,26 @@ const Input = styled.input`
 
 const SubmitButton = styled.button`
   width: 100%;
-  padding: 15px;
-  background-color: #24c6dc;
-  color: #fff;
+  padding: 15px 30px;
+  font-size: 1em;
+  color: #ffffff;
+  background-color: #ff0066;
   border: none;
   border-radius: 5px;
-  font-size: 1.1em;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  font-family: 'Press Start 2P', cursive;
+  text-shadow: 0 0 5px #ff0066, 0 0 10px #ff0066;
+  transition: background-color 0.3s ease, transform 0.3s ease;
 
   &:hover {
-    background-color: #abecd6;
+    background-color: #ff6699;
+    transform: translateY(-5px);
   }
+
+
 `;
+
+
 
 interface FormData {
   genre: string;

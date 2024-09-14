@@ -1,4 +1,4 @@
-// src/components/LandingPage.tsx
+
 
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
@@ -6,6 +6,24 @@ import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Typing from 'react-typing-effect';
 
+
+const BackgroundContainer = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  z-index: -1; /* Place it behind other content */
+  overflow: hidden;
+`;
+
+const BackgroundImage = styled.img`
+  width: 100%;
+  height: 100%;
+  object-fit: cover; 
+`;
+
+    
 const backgroundAnimation = keyframes`
   0% { background-position: 0% 50%;}
   50% { background-position: 100% 50%;}
@@ -60,6 +78,25 @@ const StartButton = styled(motion.button)`
   }
 `;
 
+
+const DemoButton = styled(motion.button)`
+  padding: 15px 30px;
+  font-size: 1em;
+  color: #ffffff;
+  background-color: #ff0066;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  font-family: 'Press Start 2P', cursive;
+  text-shadow: 0 0 5px #ff0066, 0 0 10px #ff0066;
+  transition: background-color 0.3s ease, transform 0.3s ease;
+
+  &:hover {
+    background-color: #ff6699;
+    transform: translateY(-5px);
+  }
+`;
+
 const LandingPage: React.FC = () => {
   const navigate = useNavigate();
 
@@ -67,8 +104,18 @@ const LandingPage: React.FC = () => {
     navigate('/questionnaire');
   };
 
+  const handleDemoPage = () => {
+    navigate('/demopage');
+  };
+
+
   return (
+
+
+
     <LandingContainer>
+      
+
       <Heading
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
@@ -89,6 +136,7 @@ const LandingPage: React.FC = () => {
           displayTextRenderer={(text) => <span>{text}</span>}
         />
       </Subheading>
+
       <StartButton
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
@@ -96,9 +144,24 @@ const LandingPage: React.FC = () => {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1, delay: 5 }}
+        style={{ marginBottom: '20px' }}
       >
         Start your game
       </StartButton>
+
+
+
+      <DemoButton
+        whileHover={{ scale: 1.1 }}
+        whileTap={{ scale: 0.9 }}
+        onClick={handleDemoPage} 
+        initial={{ opacity: 0, y: 50 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 1, delay: 6 }} 
+      >
+        See how our game works
+      </DemoButton>
+
     </LandingContainer>
   );
 };

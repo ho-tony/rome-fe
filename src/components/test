@@ -1,0 +1,136 @@
+import React, { useState } from "react";
+
+// Array of character images (URLs or local imports)
+const characterImages = [
+  "https://example.com/image1.jpg", 
+  "https://example.com/image2.jpg",
+  "https://example.com/image3.jpg",
+
+  // Add more images here
+];
+
+
+const CharacterCarousel = () => {
+  // State to keep track of the current image index
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+
+  // Function to go to the previous image
+  const handlePrevClick = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? characterImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  // Function to go to the next image
+  const handleNextClick = () => {
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === characterImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  return (
+    <div style={{ textAlign: "center", marginTop: "50px" }}>
+      {/* Display the current image */}
+      <img
+        src={characterImages[currentImageIndex]}
+        alt="Character"
+        style={{ width: "300px", height: "400px", objectFit: "cover" }}
+      />
+      <div style={{ marginTop: "20px" }}>
+        {/* Left button */}
+        <button onClick={handlePrevClick} style={{ marginRight: "10px" }}>
+          Left
+        </button>
+        {/* Right button */}
+        <button onClick={handleNextClick}>Right</button>
+      </div>
+    </div>
+  );
+};
+
+
+
+import { useState } from "react";
+
+const ImageSlider = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [hasInteracted, setHasInteracted] = useState(false); // New state to track interaction
+
+  const handlePrevClick = () => {
+    setHasInteracted(true); // Mark that the user has interacted
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? characterImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNextClick = () => {
+    setHasInteracted(true); // Mark that the user has interacted
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === characterImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  return (
+    <div>
+        <button onClick={handlePrevClick}>Previous</button>
+      <button onClick={handleNextClick}>Next</button>
+      <img
+        src={characterImages[currentImageIndex]}
+        alt="Character"
+        style={{ display: "block" }}
+      />
+      
+      {/* Generate text when the picture is switched */}
+      {hasInteracted && <p>Picture {currentImageIndex + 1} is being displayed</p>}
+
+
+    </div>
+  );
+};
+
+export default ImageSlider;
+
+
+
+
+import { useState } from "react";
+
+const ImageSlider = () => {
+  const [currentImageIndex, setCurrentImageIndex] = useState(0);
+  const [hasInteracted, setHasInteracted] = useState(false); // New state to track interaction
+
+  const handlePrevClick = () => {
+    setHasInteracted(true); // Mark that the user has interacted
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === 0 ? characterImages.length - 1 : prevIndex - 1
+    );
+  };
+
+  const handleNextClick = () => {
+    setHasInteracted(true); // Mark that the user has interacted
+    setCurrentImageIndex((prevIndex) =>
+      prevIndex === characterImages.length - 1 ? 0 : prevIndex + 1
+    );
+  };
+
+  return (
+    <div>
+      {/* Conditionally render the image only when the user has clicked a button */}
+      {hasInteracted && (
+        <div>
+          <img
+            src={characterImages[currentImageIndex]}
+            alt="Character"
+            style={{ display: "block", width: "300px", height: "400px", objectFit: "cover"  }}
+          />
+          <p>Picture {currentImageIndex + 1} is being displayed</p>
+        </div>
+      )}
+
+      <button onClick={handlePrevClick}>Previous</button>
+      <button onClick={handleNextClick}>Next</button>
+    </div>
+  );
+};
+
+export default ImageSlider;
