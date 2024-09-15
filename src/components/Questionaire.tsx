@@ -1,7 +1,49 @@
-import React, { useState } from 'react';
+import React, { useState, useRef } from 'react';
 import styled from 'styled-components';
 import Axios from 'axios';
 import { useNavigate } from 'react-router-dom';
+import backgroundVid from '../assets/background2.mp4';
+
+
+
+
+
+const VideoBackgroundContainer = styled.div`
+
+  width: 100%;
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+`;
+
+// Styled video component to ensure it covers the entire container
+const StyledVideo = styled.video`
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  min-width: 100%;
+  min-height: 100%;
+  width: 100vw;
+  height: 100vh;
+  transform: translate(-50%, -50%);
+  object-fit: cover; /* Ensures the video covers the container without distortion */
+  z-index: -1; /* Keeps the video behind other content */
+  autoplay: true;
+`;
+
+// Content to display on top of the video
+const Content = styled.div`
+  position: relative;
+  z-index: 1;
+  color: white;
+  text-align: center;
+  font-size: 1rem;
+`;
 
 const Container = styled.div`
   max-width: 600px;
@@ -105,33 +147,9 @@ const Questionnaire: React.FC = () => {
   };
 
   const handleSubmit = async (e) => {
-    e.preventDefault(); // Prevent page reload on form submission
-
+    e.preventDefault();
 
     navigate('/loading', {state:{formData}});
-
-
-    // Create a FormData object
-    const formPayload = new FormData();
-    Object.keys(formData).forEach((key) => {
-      formPayload.append(key, formData[key]);
-    });
-
-    try {
-      const response = await fetch('http://localhost:8000/api/submit-form/', {
-        method: 'POST',
-        body: formPayload,
-      });
-
-      if (response.ok) {
-        const responseData = await response.json();
-        console.log('Form submission successful', responseData);
-      } else {
-        console.error('Form submission failed');
-      }
-    } catch (error) {
-      console.error('Error submitting form:', error);
-    }
   };
 
 
@@ -206,13 +224,12 @@ const Questionnaire: React.FC = () => {
 
 
         <Label htmlFor="genre">What Genre do you want your game to be?</Label>
-        <textarea
+        <Input
           type="text"
           id="genre"
           name="genre"
           value={formData.genre}
           onChange={handleChange}
-          style={{ width: '550px', height: '150px' }} 
         />
 
 
@@ -227,37 +244,34 @@ const Questionnaire: React.FC = () => {
       <FormGroup>
 
         <Label htmlFor="characters">Describle How do you want your main Character to look like</Label>
-        <textarea
+        <Input
           type="text"
           id="characters"
           name="characters"
           value={formData.characters}
           onChange={handleChange}
           required
-          style={{ width: '550px', height: '150px' }} 
         />
 
         
         <Label htmlFor="enemies">Describle How do you want your Monsters to look like</Label>
-        <textarea
+        <Input
           type="text"
           id="enemies"
           name="enemies"
           value={formData.enemies}
           onChange={handleChange}
           required
-          style={{ width: '550px', height: '150px' }} 
         />
 
         <Label htmlFor="weapons">Describle How do you want your Weapons to look like</Label>
-        <textarea
+        <Input
           type="text"
           id="weapons"
           name="weapons"
           value={formData.weapons}
           onChange={handleChange}
           required
-          style={{ width: '550px', height: '150px' }} 
         />
       </FormGroup>
 
@@ -266,8 +280,33 @@ const Questionnaire: React.FC = () => {
 
   ];
 
+  const videoRef = useRef<HTMLVideoElement | null>(null);
+  const [isReady, setIsReady] = useState(false);
+
+  // Handle when the video is ready to play
+  const handleCanPlay = () => {
+    setIsReady(true);
+    videoRef.current?.play(); // Play the video once it's fully loaded
+  };
+
   return (
-    <Container>
+    
+    <VideoBackgroundContainer>
+      <StyledVideo
+      ref={videoRef}
+      muted
+      loop
+      playsInline
+      onCanPlay={handleCanPlay}
+      style={{ opacity: isReady ? 1 : 0, transition: 'opacity 0.5s ease-in-out' }} // Fade in the video
+    >
+        <source src={backgroundVid}  type="video/mp4" />
+        Your browser does not support the video tag.
+      </StyledVideo>
+
+      <Container>
+
+        
       <form onSubmit={handleSubmit}>
         {steps[currentPage]}
 
@@ -290,7 +329,11 @@ const Questionnaire: React.FC = () => {
         </div>
       </form>
     </Container>
+  
+
+    </VideoBackgroundContainer>
   );
+    
 };
 
 export default Questionnaire;

@@ -128,6 +128,13 @@ const StartButton = styled(motion.button)`
   }
 `;
 
+const AssetList = styled.ul`
+  list-style: none;
+  padding: 0;
+  margin: 20px;
+  color: white;
+`;
+
 
 const DemoButton = styled(motion.button)`
   padding: 15px 30px;
@@ -182,11 +189,6 @@ const LandingPage: React.FC = () => {
       </StyledVideo>
 
       <Content>
-
-
-
-
-
       
       
       <Heading
