@@ -42,7 +42,7 @@ const Header: React.FC = () => {
       <StyledToolbar>
         <Heading
         onClick={handleHomePage}>
-          * * * * * * * * * * * * Rome * * * * * * * * * * *
+        Rome
         </Heading>
       </StyledToolbar>
     </AppBar>

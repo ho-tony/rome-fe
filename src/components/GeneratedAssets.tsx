@@ -21,7 +21,7 @@ function GeneratedAssets() {
 
         if (response.ok) {
           const data = await response.json();
-          setAssets(data); // Assuming Django returns the assets (images, files, etc.)
+          setAssets(data); 
         } else {
           console.error('Failed to fetch assets');
         }
