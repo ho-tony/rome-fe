@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useRef} from 'react';
 import styled, { keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigate, useLocation } from 'react-router-dom';
@@ -6,6 +6,32 @@ import Typing from 'react-typing-effect';
 import YouTube from 'react-youtube';
 
 
+
+import img1 from '../assets/p1.png';
+import img2 from '../assets/p2.png';
+import img3 from '../assets/p3.png';
+import img4 from '../assets/p4.png';
+import img5 from '../assets/p5.png';
+import img6 from '../assets/p6.png';
+import img7 from '../assets/p7.png';
+import img8 from '../assets/p8.png';
+
+
+
+const handleDownload = () => {
+    const fileName = 'dist-4.zip'; 
+    const filePath = `../assets/dist-4.zip`; 
+
+    // Create a temporary anchor element
+    const link = document.createElement('a');
+    link.href = filePath;
+    link.download = fileName;
+
+    // Append to the document, click, and remove
+    document.body.appendChild(link);
+    link.click();
+    // document.body.removeChild(link);
+  };
 
 
 const ImageList = styled.ul`
@@ -114,6 +140,22 @@ const DemoButton = styled(motion.button)`
 `;
 
 
+const ImageGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); // Responsive grid
+  gap: 20px;
+`;
+
+const ImageContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+`;
+
+const ImageCheckbox = styled.input`
+  margin-top: 10px;
+`;
+
 
 
 
@@ -125,41 +167,91 @@ function GeneratedAssets() {
   const [loading, setLoading] = useState(true);
 
 
-  useEffect(() => {
-    const fetchImages = async () => {
-      try {
-        console.log(formData)
-        const response = await fetch('http://localhost:8000/api/get-assets/', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(formData), 
-        });
+  const [selectedImages, setSelectedImages] = useState([]); // Track selected images
+
+  // Placeholder image URLs (replace with your actual image data)
+  const imageUrls = [
+    img1,
+    img2,
+    img3,
+    img4,  
+  ];
+
+
+  const imageUrls2 = [
+    img5,
+    img6,
+    img7,
+    img8,  
+  ];
+
+  const DelayedImage = ({ src, alt, delay, style }) => {
+    const [showImage, setShowImage] = useState(false);
   
-        if (response.ok) {
-          const data = await response.json();   
-          console.log('Images received:', data);
+    useEffect(() => {
+      const timer = setTimeout(() => {
+        setShowImage(true);
+      }, delay);
+  
+      return () => clearTimeout(timer); // Clean up the timer if the component unmounts
+    }, [delay]);
+  
+    return (
+      <>
+        {showImage ? (
+          <img src={src} alt={alt} style = {style} />
+        ) : (
+          <Subheading2>Loading image...</Subheading2> 
+        )}
+      </>
+    );
+  };
+
+  const handleCheckboxChange = (index) => {
+    setSelectedImages((prevSelected) => {
+      if (prevSelected.includes(index)) {
+        return prevSelected.filter((item) => item !== index);
+      } else {
+        return [...prevSelected, index];
+      }
+    });
+  };
+
+//   useEffect(() => {
+//     const fetchImages = async () => {
+//       try {
+//         console.log(formData)
+//         const response = await fetch('http://localhost:8000/api/get-assets/', {
+//           method: 'POST',
+//           headers: {
+//             'Content-Type': 'application/json',
+//           },
+//           body: JSON.stringify(formData), 
+//         });
+  
+//         if (response.ok) {
+//           const data = await response.json();   
+//           console.log('Images received:', data);
   
           
-          const decodedImages = Object.entries(data).map(([filename, base64Image]) => ({
-            filename,
-            src: `data:image/png;base64,${base64Image}`
-          }));
+//           const decodedImages = Object.entries(data).map(([filename, base64Image]) => ({
+//             filename,
+//             src: `data:image/png;base64,${base64Image}`
+//           }));
 
-          setImages(decodedImages); 
-        } else {
-          console.error('Failed to fetch images:', response.statusText);
-        }
-      } catch (error) {
-        console.error('Error fetching images:', error);
-      } finally {
-        setLoading(false); 
-      }
-    };
+//           setImages(decodedImages); 
+//         } else {
+//           console.error('Failed to fetch images:', response.statusText);
+//         }
+//       } catch (error) {
+//         console.error('Error fetching images:', error);
+//       } finally {
+//         setLoading(false); 
+//       }
+//     };
   
-    fetchImages(); 
-  }, [formData]);
+//     fetchImages(); 
+//   }, [formData]);
   
 
   const handleAcceptAssets = () => {
@@ -172,33 +264,63 @@ function GeneratedAssets() {
   };
 
 
-  if (loading) {
-    return (
-      <LandingContainer>
-        <Heading>Loading...</Heading>
-      </LandingContainer>
-    );
-  }
+
+const DownloadZip = () => {
+  return (
+      <a
+        href="../assets/dist.zip"
+        download="rome.zip"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+      </a>
+  );
+};
+
+
+
+//   if (loading) {
+//     return (
+//       <LandingContainer>
+//         <Heading>Loading...</Heading>
+//       </LandingContainer>
+//     );
+//   }
+
+
 
   return (
     
     <LandingContainer>
       <Heading>Generated Assets</Heading>
-      
-      <div>
-      {images && images.length > 0 ? (
-        <ImageList> 
-          {images.map((filename, src) => (
-            <img 
-              key={filename} 
-              src={src} 
+
+      <Subheading3> Mob Design Assets</Subheading3>
+
+      <ImageGrid>
+        {imageUrls.map((url, index) => (
+          <ImageContainer key={index}>
+            <DelayedImage delay = {Math.random() * 10000 + 2000} src={url} alt={`Generated Asset ${index + 1}`} style={{height: '400px', width: '400px'}}/>
+            <ImageCheckbox style={{height: '50px', width: '50px'}}
+              type="checkbox"
             />
-          ))}
-        </ImageList>
-      ) : (
-        <p>Our Generative AI was unable to generate images based on your descriptions, please try regenerating the images with a different prompt!</p>
-      )}
-    </div>
+          </ImageContainer>
+        ))}
+      </ImageGrid>
+
+      <Subheading3> Boss Design Assets</Subheading3>
+
+      <ImageGrid>
+        {imageUrls2.map((url, index) => (
+          <ImageContainer key={index}>
+            <DelayedImage delay = {Math.random() * 10000 + 2000} src={url} alt={`Generated Asset ${index + 1}`} style={{height: '400px', width: '400px'}}/>
+            <ImageCheckbox
+              style={{height: '50px', width: '50px'}}
+              type="checkbox"
+            />
+          </ImageContainer>
+        ))}
+      </ImageGrid>
+    
 
       <div>
 
@@ -209,11 +331,11 @@ function GeneratedAssets() {
       <StartButton
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        onClick={handleAcceptAssets}
+        onClick={handleDownload}
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1}}
-        style={{ marginRight: '40px' }}
+        style={{ marginBottom: '30px', marginTop: '20px', marginRight: '20px' }}
       >
         Accept Assets
       </StartButton>
@@ -225,6 +347,7 @@ function GeneratedAssets() {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1}}
+        style={{ marginBottom: '40px', marginTop: '20px' , marginLeft: '20px'   }}
       >
         Regenerate Assets
       </DemoButton>

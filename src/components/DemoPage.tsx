@@ -118,7 +118,7 @@ const YouTubePlayer = () => {
       },
     };
   
-    return <YouTube videoId="dQw4w9WgXcQ" opts={opts} />;
+    return <YouTube videoId="g8qTKfzhwSc" opts={opts} />;
   };
 
 
@@ -214,7 +214,8 @@ const DemoPage: React.FC = () => {
         Generative AI GamePlay
       </Heading>
 
-        <div style={{        display: 'flex',
+        <div style={{        
+          display: 'flex',
                             justifyContent: 'center',
                             alignItems: 'center',
                             padding: '20px',
@@ -227,7 +228,7 @@ const DemoPage: React.FC = () => {
                             margin: '20px auto',
                             borderRadius: '10px',
                 }}>
-        <YouTube videoId="dQw4w9WgXcQ" opts={opts} />
+        <YouTube videoId="g8qTKfzhwSc" opts={opts} />
         </div>
 
 
