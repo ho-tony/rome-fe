@@ -138,13 +138,14 @@ function GeneratedAssets() {
         });
 
         if (response.ok) {
-          const data = await response.json();
-          console.log('Assets received:', data); 
-          setAssets(data); 
-          
-        } else {
-          console.error('Failed to fetch assets');
-        }
+            const data = await response.json();
+            console.log('Assets received:', data);
+            setAssets(data);
+          } else {
+            console.error('Failed to fetch assets:', response.statusText);
+          }
+
+
       } catch (error) {
         console.error('Error fetching assets:', error);
       } finally {
@@ -174,12 +175,15 @@ function GeneratedAssets() {
   }
 
   return (
+    
     <LandingContainer>
       <Heading>Generated Assets</Heading>
+      
       <div>
-        console.log(assets)
+        
         {assets && assets.length > 0 ? (
           <AssetList>
+            
             {assets.map((asset) => (
               <li key={asset.id}>
                 <strong>{asset.name} </strong>: ${asset.value}
@@ -187,7 +191,7 @@ function GeneratedAssets() {
             ))}
           </AssetList>
         ) : (
-          <p>No assets available.</p>
+          <p>Our Generative AI was unable to generate assets based on your descriptions, please try regenerating the assets with a different prompt!</p>
         )}
       </div>
 
