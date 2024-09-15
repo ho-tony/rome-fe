@@ -4,6 +4,8 @@ import styled, { keyframes } from 'styled-components';
 import { motion } from 'framer-motion';
 import { useNavigate } from 'react-router-dom';
 import Typing from 'react-typing-effect';
+import YouTube from 'react-youtube';
+
 
 
 import character1 from '../assets/Character1.webp';
@@ -18,18 +20,20 @@ const backgroundAnimation = keyframes`
   100% { background-position: 0% 50%;}
 `;
 
-// Video game themed gradient
+
+
+
 const LandingContainer = styled.div`
   width: 100%;
-  height: 100vh;
+  min-height: 100vh;  /* Ensures it covers at least the full viewport height */
   background: linear-gradient(45deg, #0f0c29, #302b63, #24243e);
   background-size: 400% 400%;
   animation: ${backgroundAnimation} 15s ease infinite;
   display: flex;
   flex-direction: column;
-  justify-content: left;
-  align-items: left;
-  text-align: left;
+  justify-content: flex-left;  /* Ensure content starts from top */
+  align-items: flex-left;
+  position: relative;  /* Allows it to grow as content increases */
 `;
 
 const Heading = styled(motion.h1)`
@@ -42,13 +46,28 @@ const Heading = styled(motion.h1)`
   margin-left: 100px;
 `;
 
-const Subheading = styled(motion.p)`
-    font-size: 1.2em;
+const Subheading2 = styled(motion.p)`
+    font-size: 2em;
     color: #ffffff;
     margin-bottom: 40px;
     font-family: 'Press Start 2P', cursive;
     text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+    margin-left: 80px; /* Add these here */
+    margin-right: 80px;
 `;
+
+
+
+const Subheading3 = styled(motion.p)`
+    font-size: 1.5em;
+    color: #ffffff;
+    margin-bottom: 40px;
+    font-family: 'Press Start 2P', cursive;
+    text-shadow: 0 0 5px #00ffff, 0 0 10px #00ffff;
+    margin-left: 80px; /* Add these here */
+    margin-right: 80px;
+`;
+
 
 const StartButton = styled(motion.button)`
   padding: 15px 30px;
@@ -80,12 +99,27 @@ const DemoButton = styled(motion.button)`
   font-family: 'Press Start 2P', cursive;
   text-shadow: 0 0 5px #ff0066, 0 0 10px #ff0066;
   transition: background-color 0.3s ease, transform 0.3s ease;
+  margin-bottom: 50px;
 
   &:hover {
     background-color: #ff6699;
     transform: translateY(-5px);
   }
 `;
+
+
+
+const YouTubePlayer = () => {
+    const opts = {
+      height: '390',
+      width: '640',
+      playerVars: {
+        autoplay: 1,  // Will autoplay the video
+      },
+    };
+  
+    return <YouTube videoId="dQw4w9WgXcQ" opts={opts} />;
+  };
 
 
 const characterImages = [
@@ -117,7 +151,7 @@ const DelayedImage = ({ src, alt, delay, style }) => {
         {showImage ? (
           <img src={src} alt={alt} style = {style} />
         ) : (
-          <p>Loading image...</p> 
+          <Subheading2>Loading image...</Subheading2> 
         )}
       </>
     );
@@ -137,34 +171,96 @@ const DemoPage: React.FC = () => {
     );
   };
 
-  const handleGetStarted = () => {
-    navigate('/questionnaire');
-  };
 
-  const handleDemoPage = () => {
-    navigate('/DemoPage');
+  const opts = {
+    height: '390',
+    width: '640',
+    playerVars: {
+      autoplay: 1,  // Will autoplay the video
+    },
   };
 
 
   return (
     <LandingContainer>
+
+    <Heading
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 2 }}
+        style={{marginLeft: '60px'}}
+      >
+        Purpose of our App
+      </Heading>
+
+      <Subheading3
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1 }}
+      >
+        Our platform empowers content creators, companies, and influencers to elevate their brand presence by seamlessly integrating customized games that reflect their unique brand identity. Whether you're looking to engage your audience through interactive experiences or strengthen your brand’s recognition, our app leverages advanced AI technology to generate games that are tailored specifically to your brand's values, themes, and aesthetic. By offering personalized gaming experiences, we help creators and businesses build deeper connections with their audience, boosting engagement and enhancing brand loyalty.
+      </Subheading3>
+
+      
+
+
+
       <Heading
         initial={{ opacity: 0, scale: 0.5 }}
         animate={{ opacity: 1, scale: 1 }}
         transition={{ duration: 2 }}
         style={{marginLeft: '60px'}}
       >
-        How our app works
+        Generative AI GamePlay
       </Heading>
 
-      <Subheading
+        <div style={{        display: 'flex',
+                            justifyContent: 'center',
+                            alignItems: 'center',
+                            padding: '20px',
+                            backgroundColor: 'black',
+                            border: '5px solid',
+                            borderImageSource: 'linear-gradient(45deg, #a445b2, #fa4299)',
+                            borderImageSlice: 1,
+                            boxShadow: '0 0 15px #fa4299, 0 0 30px #a445b2, 0 0 45px #fa4299, 0 0 60px #a445b2',
+                            width: 'fit-content',
+                            margin: '20px auto',
+                            borderRadius: '10px',
+                }}>
+        <YouTube videoId="dQw4w9WgXcQ" opts={opts} />
+        </div>
+
+
+
+      <Heading
+        initial={{ opacity: 0, scale: 0.5 }}
+        animate={{ opacity: 1, scale: 1 }}
+        transition={{ duration: 2 }}
+        style={{marginLeft: '60px'}}
+      >
+        How our application works
+      </Heading>
+
+      
+
+      <Subheading2
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ duration: 1, delay: 1 }}
-        style={{marginLeft: '80px'}}
+      >
+        
+      </Subheading2>
+
+      <Subheading3
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1 }}
       >
         Our application provides users with the ability to create personalized characters by simply providing a detailed prompt. This feature enables users to customize and design unique characters, ensuring that each creation reflects their preferences, imagination, and creativity. The process is user-friendly and intuitive, offering a seamless experience for bringing characters to life based on user input.
-      </Subheading>
+      </Subheading3>
+
+
+
 
       
       <div style={{ textAlign: "center", marginTop: "50px" }}>
@@ -178,7 +274,7 @@ const DemoPage: React.FC = () => {
       
       {hasInteracted && (
         <div>
-        <Subheading style={{marginBottom: "100px"}}>
+        <Subheading3>
             <Typing
                 key = {currentImageIndex}
                 text = {characterDescriptions[currentImageIndex]}
@@ -189,7 +285,7 @@ const DemoPage: React.FC = () => {
             > 
             </Typing>
             
-        </Subheading >
+        </Subheading3 >
 
         <div style={{ display: "flex", justifyContent: "center", alignItems: "center", textAlign: "left"}}>
           <DelayedImage
@@ -197,11 +293,12 @@ const DemoPage: React.FC = () => {
             src={characterImages[currentImageIndex]}
             alt="Character"
             delay={3000}
-            style={{ margin: 0, display: "block" ,  width: "300px", height: "400px", objectFit: "cover",}}
+            style={{ marginBottom: '20px', display: "block" ,  width: "300px", height: "400px", objectFit: "cover",}}
           />
         </div>
         </div>
       )}
+
 
     </div>
 
