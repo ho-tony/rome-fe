@@ -115,7 +115,7 @@ interface FormData {
   setting: string;
 
 
-  characters: string;
+  boss: string;
   enemies: string;
   weapons: string;
   [key: string]: string;
@@ -135,7 +135,7 @@ const Questionnaire: React.FC = () => {
 
     weapons: '',
     enemies: '',
-    characters: '',
+    boss: '',
   });
 
   const [currentPage, setCurrentPage] = useState(0);
@@ -243,11 +243,11 @@ const Questionnaire: React.FC = () => {
       <Title>Step 3: Characters</Title>
       <FormGroup>
 
-        <Label htmlFor="characters">Describle How do you want your main Character to look like</Label>
+        <Label htmlFor="boss">Describle How do you want your main Boss to look like</Label>
         <Input
           type="text"
-          id="characters"
-          name="characters"
+          id="boss"
+          name="boss"
           value={formData.characters}
           onChange={handleChange}
           required

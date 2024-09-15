@@ -118,7 +118,7 @@ const DemoButton = styled(motion.button)`
 
 
 function GeneratedAssets() {
-
+  const navigate = useNavigate();
   const location = useLocation();
   const { formData } = location.state; 
   const [assets, setAssets] = useState(null);
@@ -157,32 +157,11 @@ function GeneratedAssets() {
 
   const handleAcceptAssets = () => {
     console.log('Assets accepted:', assets);
-    // Add further actions like saving the assets or navigating to another page
+    //download zip
   };
 
-  const handleRegenerateAssets = async () => {
-    setLoading(true);
-    try {
-      const response = await fetch('http://localhost:8000/api/get-assets/', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-        },
-        body: JSON.stringify(formData),
-      });
-
-      if (response.ok) {
-        const newAssets = await response.json();
-        console.log('New assets received:', newAssets);
-        setAssets(newAssets);
-      } else {
-        console.error('Failed to regenerate assets');
-      }
-    } catch (error) {
-      console.error('Error regenerating assets:', error);
-    } finally {
-      setLoading(false);
-    }
+  const handleRegenerateAssets = () => {
+    navigate('/questionnaire');
   };
 
 
@@ -198,11 +177,12 @@ function GeneratedAssets() {
     <LandingContainer>
       <Heading>Generated Assets</Heading>
       <div>
+        console.log(assets)
         {assets && assets.length > 0 ? (
           <AssetList>
             {assets.map((asset) => (
               <li key={asset.id}>
-                <strong>{asset.name}</strong>: ${asset.value}
+                <strong>{asset.name} </strong>: ${asset.value}
               </li>
             ))}
           </AssetList>
@@ -241,9 +221,6 @@ function GeneratedAssets() {
       </DemoButton>
 
     </ButtonContainer>
-
-
-
 
       </div>
     </LandingContainer>
