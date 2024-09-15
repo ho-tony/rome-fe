@@ -113,16 +113,34 @@ const DemoButton = styled(motion.button)`
   }
 `;
 
+const handleDownload = async () => {
+  // const fileName = 'dist.zip'; 
+  // const filePath = `../assets/dist.zip`; 
 
+  // // Create a temporary anchor element
+  // const link = document.createElement('a');
+  // link.href = filePath;
+  // link.download = fileName;
 
+  // // Append to the document, click, and remove
+  // document.body.appendChild(link);
+  // link.click();
+  // // document.body.removeChild(link);
+  // document.body.removeChild(link);
+
+  const response = await fetch('http://localhost:8000/api/get-zip/');
+};
 
 
 function GeneratedAssets() {
   const navigate = useNavigate();
   const location = useLocation();
   const { formData } = location.state; 
-  const [images, setImages] = useState(Object);
+  const [images, setImages] = useState([]);
   const [loading, setLoading] = useState(true);
+
+  const [accepted, setAccepted] = useState(false);
+  const [picked, setPicked] = useState(0);
 
 
   useEffect(() => {
@@ -134,18 +152,21 @@ function GeneratedAssets() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData), 
+          body: JSON.stringify(formData),
         });
   
         if (response.ok) {
-          const data = await response.json();   
+          let data = await response.json();
+          data = data.images;
           console.log('Images received:', data);
   
           
           const decodedImages = Object.entries(data).map(([filename, base64Image]) => ({
             filename,
-            src: `data:image/png;base64,${base64Image}`
+            src: `${base64Image}`
           }));
+
+          console.log(decodedImages);
 
           setImages(decodedImages); 
         } else {
@@ -158,14 +179,47 @@ function GeneratedAssets() {
       }
     };
   
-    fetchImages(); 
+    fetchImages();
   }, [formData]);
   
+  useEffect(() => {
+    const downloadZip = async () => {
+      const response = await fetch('http://localhost:8000/api/get-zip/', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({picked: picked})
+      });
+      if (!response.ok) {
+        console.log("response not okay");
+        return;
+      }
 
-  const handleAcceptAssets = () => {
-    console.log('Assets accepted:', images);
-    //download zip
-  };
+      const blob = await response.blob();
+
+      const url = window.URL.createObjectURL(blob);
+
+      const a = document.createElement('a');
+      a.style.display = 'none';
+      a.href = url;
+
+      // Set the file name
+      a.download = 'dist.zip';
+
+      // Append to the body and click
+      document.body.appendChild(a);
+      a.click();
+
+      // Clean up
+      window.URL.revokeObjectURL(url);
+      document.body.removeChild(a);
+    };
+
+    if (accepted) {
+      downloadZip();
+    }
+  }, [accepted])
 
   const handleRegenerateAssets = () => {
     navigate('/questionnaire');
@@ -185,35 +239,57 @@ function GeneratedAssets() {
     <LandingContainer>
       <Heading>Generated Assets</Heading>
       
-      <div>
-      {images && images.length > 0 ? (
-        <ImageList> 
-          {images.map((filename, src) => (
-            <img 
-              key={filename} 
-              src={src} 
-            />
-          ))}
-        </ImageList>
-      ) : (
-        <p>Our Generative AI was unable to generate images based on your descriptions, please try regenerating the images with a different prompt!</p>
-      )}
-    </div>
+<div>
+  {Object.keys(images).length > 0 ? ( 
+    <ImageList>
+      {/* {Object.keys(images).map((key) => (
+        <img
+          key={key}
+          src={}
+          alt={`Generated Image ${key.replace('img', '')}`}
+        />
+      ))} */}
+      {images.map((image, index) => (
+    <div key={index} className="image-checkbox-container" style={{ display: 'flex', alignItems: 'center', marginBottom: '10px' }}>
+    <input
+      type="checkbox"
+      id={`image-checkbox-${index}`}
+      style={{ marginRight: '10px' }}
+      onClick={() => {
+        setPicked(index)
+      }}
+    />
+    <label htmlFor={`image-checkbox-${index}`} style={{ display: 'flex', alignItems: 'center' }}>
+      <img 
+        src={image.src}
+        alt={image}
+        style={{ maxWidth: '200px', height: 'auto' }} // Adjust size as needed
+      />
+    </label>
+  </div>
+      ))}
+    </ImageList>
+  ) : (
+    <p>Our Generative AI was unable to generate images...</p>
+  )}
+</div>
 
       <div>
 
 
 
-      <ButtonContainer>
-        
+            <ButtonContainer>
+
       <StartButton
         whileHover={{ scale: 1.1 }}
         whileTap={{ scale: 0.9 }}
-        onClick={handleAcceptAssets}
+        onClick={() => {
+          setAccepted(accepted => !accepted);
+        }}
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1}}
-        style={{ marginRight: '40px' }}
+        style={{ marginBottom: '30px', marginTop: '20px', marginRight: '20px' }}
       >
         Accept Assets
       </StartButton>
@@ -225,11 +301,12 @@ function GeneratedAssets() {
         initial={{ opacity: 0, y: 50 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 1}}
+        style={{ marginBottom: '40px', marginTop: '20px' , marginLeft: '20px'   }}
       >
         Regenerate Assets
       </DemoButton>
 
-    </ButtonContainer>
+</ButtonContainer>
 
       </div>
     </LandingContainer>
