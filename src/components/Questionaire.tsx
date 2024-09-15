@@ -71,12 +71,9 @@ interface FormData {
   setting: string;
 
 
-  mainCharacterType: string;
-  mainEnemyType: string;
-
-
   characters: string;
-  difficulty: string;
+  enemies: string;
+  weapons: string;
   [key: string]: string;
 }
 
@@ -87,11 +84,11 @@ const Questionnaire: React.FC = () => {
     audience: '',
   
     genre: '',
-    mainCharacterType: '',
-    mainEnemyType: '',
     setting: '',
+
+    weapons: '',
+    enemies: '',
     characters: '',
-    difficulty: '',
   });
 
   const [currentPage, setCurrentPage] = useState(0);
@@ -104,7 +101,7 @@ const Questionnaire: React.FC = () => {
 
   const handleSubmit = (e: React.FormEvent): void => {
     e.preventDefault();
-    // Send data to backend
+    
     fetch('https://your-backend-api.com/generate-game', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
@@ -139,7 +136,7 @@ const Questionnaire: React.FC = () => {
           type="text"
           id="brandName"
           name="brandName"
-          placeholder='Ex. Mr.Beast'
+          placeholder='ex. Mr.Beast'
           value={formData.brandName}
           onChange={handleChange}
           required
@@ -151,7 +148,7 @@ const Questionnaire: React.FC = () => {
           type="text"
           id="purpose"
           name="purpose"
-          placeholder='Ex. Establish my brand'
+          placeholder='ex. Establish my brand'
           value={formData.purpose}
           onChange={handleChange}
           required
@@ -163,10 +160,10 @@ const Questionnaire: React.FC = () => {
           type="text"
           id="audience"
           name="audience"
-          placeholder='Ex. Children'
           value={formData.audience}
           onChange={handleChange}
           required
+          placeholder='ex.Children' 
         />
 
 
@@ -194,58 +191,71 @@ const Questionnaire: React.FC = () => {
         </Select>
 
 
+
         <Label htmlFor="genre">What Genre do you want your game to be?</Label>
         <Select
           id="genre"
-          name="sgenre"
+          name="genre"
           value={formData.genre}
           onChange={handleChange}
           required
         >
           <option value="">Select difficulty</option>
-          <option value="easy">Fantasy</option>
-          <option value="medium">Medieval</option>
-          <option value="hard">Sci-Fi</option>
-          <option value="expert">Post-Apocalyptic</option>
-          <option value="expert">Cyberpunk</option>
+          <option value="fantasy">Fantasy</option>
+          <option value="medival">Medieval</option>
+          <option value="sci-fi">Sci-Fi</option>
+          <option value="Post-Apocalyptic">Post-Apocalyptic</option>
+          <option value="Cyberpunk">Cyberpunk</option>
         </Select>
 
-
-         
       </FormGroup>
 
 
     </div>,
 
     <div key="step3">
-      <Title>Step 3: Main Characters</Title>
+
+      <Title>Step 3: Characters</Title>
       <FormGroup>
-        <Label htmlFor="characters">Who are the main characters?</Label>
-        <Input
+
+        <Label htmlFor="characters">Describle How do you want your main Character to look like</Label>
+        <textarea
           type="text"
           id="characters"
           name="characters"
           value={formData.characters}
           onChange={handleChange}
           required
+          style={{ width: '550px', height: '150px' }} 
         />
-      </FormGroup>
-    </div>,
 
-    <div key="step4">
-      <Title>Step 4: Game Difficulty</Title>
-      <FormGroup>
-        <Label htmlFor="difficulty">Choose a difficulty level</Label>
-        <Input
+        
+        <Label htmlFor="enemies">Describle How do you want your Monsters to look like</Label>
+        <textarea
           type="text"
-          id="difficulty"
-          name="difficulty"
-          value={formData.difficulty}
+          id="enemies"
+          name="enemies"
+          value={formData.enemies}
           onChange={handleChange}
           required
+          style={{ width: '550px', height: '150px' }} 
+        />
+
+        <Label htmlFor="weapons">Describle How do you want your Weapons to look like</Label>
+        <textarea
+          type="text"
+          id="weapons"
+          name="weapons"
+          value={formData.weapons}
+          onChange={handleChange}
+          required
+          style={{ width: '550px', height: '150px' }} 
         />
       </FormGroup>
+
     </div>,
+
+
   ];
 
   return (

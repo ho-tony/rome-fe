@@ -243,21 +243,6 @@ const DemoPage: React.FC = () => {
 
       
 
-      <Subheading2
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1 }}
-      >
-        
-      </Subheading2>
-
-      <Subheading3
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ duration: 1, delay: 1 }}
-      >
-        Our application provides users with the ability to create personalized characters by simply providing a detailed prompt. This feature enables users to customize and design unique characters, ensuring that each creation reflects their preferences, imagination, and creativity. The process is user-friendly and intuitive, offering a seamless experience for bringing characters to life based on user input.
-      </Subheading3>
 
 
 
@@ -301,6 +286,22 @@ const DemoPage: React.FC = () => {
 
 
     </div>
+    
+    <Subheading2
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1 }}
+      >
+        
+      </Subheading2>
+
+      <Subheading3
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1 }}
+      >
+        Our application provides users with the ability to create personalized characters by simply providing a detailed prompt. This feature enables users to customize and design unique characters, ensuring that each creation reflects their preferences, imagination, and creativity. The process is user-friendly and intuitive, offering a seamless experience for bringing characters to life based on user input.
+      </Subheading3>
 
 
 
