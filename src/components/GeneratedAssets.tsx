@@ -8,7 +8,7 @@ import YouTube from 'react-youtube';
 
 
 
-const AssetList = styled.ul`
+const ImageList = styled.ul`
   list-style: none;
   padding: 0;
   margin: 20px;
@@ -121,12 +121,12 @@ function GeneratedAssets() {
   const navigate = useNavigate();
   const location = useLocation();
   const { formData } = location.state; 
-  const [assets, setAssets] = useState(null);
+  const [images, setImages] = useState(Object);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
 
-    const fetchAssets = async () => {
+  useEffect(() => {
+    const fetchImages = async () => {
       try {
         console.log(formData)
         const response = await fetch('http://localhost:8000/api/get-assets/', {
@@ -134,30 +134,36 @@ function GeneratedAssets() {
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify(formData), 
+          body: JSON.stringify(formData), 
         });
-
+  
         if (response.ok) {
-            const data = await response.json();
-            console.log('Assets received:', data);
-            setAssets(data);
-          } else {
-            console.error('Failed to fetch assets:', response.statusText);
-          }
+          const data = await response.json();   
+          console.log('Images received:', data);
+  
+          
+          const decodedImages = Object.entries(data).map(([filename, base64Image]) => ({
+            filename,
+            src: `data:image/png;base64,${base64Image}`
+          }));
 
-
+          setImages(decodedImages); 
+        } else {
+          console.error('Failed to fetch images:', response.statusText);
+        }
       } catch (error) {
-        console.error('Error fetching assets:', error);
+        console.error('Error fetching images:', error);
       } finally {
-        setLoading(false); 
+        setLoading(false); 
       }
     };
-
-    fetchAssets();
+  
+    fetchImages(); 
   }, [formData]);
+  
 
   const handleAcceptAssets = () => {
-    console.log('Assets accepted:', assets);
+    console.log('Assets accepted:', images);
     //download zip
   };
 
@@ -180,20 +186,19 @@ function GeneratedAssets() {
       <Heading>Generated Assets</Heading>
       
       <div>
-        
-        {assets && assets.length > 0 ? (
-          <AssetList>
-            
-            {assets.map((asset) => (
-              <li key={asset.id}>
-                <strong>{asset.name} </strong>: ${asset.value}
-              </li>
-            ))}
-          </AssetList>
-        ) : (
-          <p>Our Generative AI was unable to generate assets based on your descriptions, please try regenerating the assets with a different prompt!</p>
-        )}
-      </div>
+      {images && images.length > 0 ? (
+        <ImageList> 
+          {images.map((filename, src) => (
+            <img 
+              key={filename} 
+              src={src} 
+            />
+          ))}
+        </ImageList>
+      ) : (
+        <p>Our Generative AI was unable to generate images based on your descriptions, please try regenerating the images with a different prompt!</p>
+      )}
+    </div>
 
       <div>
 
