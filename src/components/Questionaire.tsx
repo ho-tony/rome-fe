@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import Axios from 'axios';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   max-width: 600px;
@@ -78,6 +80,9 @@ interface FormData {
 }
 
 const Questionnaire: React.FC = () => {
+
+  const navigate = useNavigate()
+
   const [formData, setFormData] = useState<FormData>({
     brandName: '',
     purpose: '',
@@ -99,24 +104,36 @@ const Questionnaire: React.FC = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleSubmit = (e: React.FormEvent): void => {
-    e.preventDefault();
-    
-    fetch('https://your-backend-api.com/generate-game', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify(formData),
-    })
-      .then((response) => response.json())
-      .then((data) => {
-        console.log('Game generated:', data);
-        // Redirect or display the result as needed
-      })
-      .catch((error) => {
-        console.error('Error:', error);
-        alert('An error occurred while generating your game.');
+  const handleSubmit = async (e) => {
+    e.preventDefault(); // Prevent page reload on form submission
+
+
+    navigate('/loading', {state:{formData}});
+
+
+    // Create a FormData object
+    const formPayload = new FormData();
+    Object.keys(formData).forEach((key) => {
+      formPayload.append(key, formData[key]);
+    });
+
+    try {
+      const response = await fetch('http://localhost:8000/api/submit-form/', {
+        method: 'POST',
+        body: formPayload,
       });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        console.log('Form submission successful', responseData);
+      } else {
+        console.error('Form submission failed');
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+    }
   };
+
 
   const nextPage = () => {
     setCurrentPage(currentPage + 1);
@@ -139,7 +156,6 @@ const Questionnaire: React.FC = () => {
           placeholder='ex. Mr.Beast'
           value={formData.brandName}
           onChange={handleChange}
-          required
         />
 
 
@@ -151,7 +167,6 @@ const Questionnaire: React.FC = () => {
           placeholder='ex. Establish my brand'
           value={formData.purpose}
           onChange={handleChange}
-          required
         />
 
 
@@ -162,7 +177,6 @@ const Questionnaire: React.FC = () => {
           name="audience"
           value={formData.audience}
           onChange={handleChange}
-          required
           placeholder='ex.Children' 
         />
 
@@ -181,7 +195,6 @@ const Questionnaire: React.FC = () => {
           name="setting"
           value={formData.setting}
           onChange={handleChange}
-          required
         >
           <option value="">Select difficulty</option>
           <option value="easy">Easy</option>
@@ -193,20 +206,15 @@ const Questionnaire: React.FC = () => {
 
 
         <Label htmlFor="genre">What Genre do you want your game to be?</Label>
-        <Select
+        <textarea
+          type="text"
           id="genre"
           name="genre"
           value={formData.genre}
           onChange={handleChange}
-          required
-        >
-          <option value="">Select difficulty</option>
-          <option value="fantasy">Fantasy</option>
-          <option value="medival">Medieval</option>
-          <option value="sci-fi">Sci-Fi</option>
-          <option value="Post-Apocalyptic">Post-Apocalyptic</option>
-          <option value="Cyberpunk">Cyberpunk</option>
-        </Select>
+          style={{ width: '550px', height: '150px' }} 
+        />
+
 
       </FormGroup>
 
